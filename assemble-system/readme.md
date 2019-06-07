@@ -13,7 +13,7 @@ The intuition is to use text editing tools to mutate the ions. However, due to c
       &ensp;&ensp;&ensp;&ensp; step5.1_assembly.crd  
       
 - Text-edit **'POT'** to **'CAL'**, also change the mass and charge accordingly  
-  &ensp;&ensp; Perform test editing in `step5.1_assembly.psf` and `step5.1_assembly.crd`.  
+  &ensp;&ensp; Perform test editing in `step5.1_assembly.psf` and `step5.1_assembly.crd`. Change resname 'POT' to 'CAL' but keep the segname still 'POT'.   
   
   &ensp;&ensp; In `step5.1_assembly.psf` file:  
   &ensp;&ensp; Before:
@@ -32,7 +32,7 @@ The intuition is to use text editing tools to mutate the ions. However, due to c
     599213 POT      471      CAL      CAL      CAL       2.00000       40.0800           0   0.00000     -0.301140E-02
   ```
   
-  &ensp;&ensp; In `step5.1_assembly.crd` file:
+  &ensp;&ensp; In `step5.1_assembly.crd` file:  
   &ensp;&ensp; Before:
   ```
     599210    147852  POT       POT            10.2238013000      -21.3232687000      -77.2359248000  POT       468             0.0000000000
@@ -48,3 +48,25 @@ The intuition is to use text editing tools to mutate the ions. However, due to c
     599212    147854  CAL       CAL            81.0987125000      -84.4845251000       67.5789246000  POT       470             0.0000000000
     599213    147855  CAL       CAL            48.9741087000      -94.2898129000       29.6778919000  POT       471             0.0000000000
   ```
+
+- Generate inputs for simulation program, use OpenMM for example
+      &ensp;&ensp; Because of OpenMM's high performance, we mainly use OpenMM for large system simulations these days (6/2019). `step5.1_input.inp` prepare the system for OpenMM simulations.  
+  &ensp;&ensp; Inputs:   
+      &ensp;&ensp;&ensp;&ensp; step5.1_assembly.psf  
+      &ensp;&ensp;&ensp;&ensp; step5.1_assembly.crd  
+  &ensp;&ensp; Outputs:  
+      &ensp;&ensp;&ensp;&ensp; step5_charmm2omm.psf  
+      &ensp;&ensp;&ensp;&ensp; step5_charmm2omm.oldpsf 
+      &ensp;&ensp;&ensp;&ensp; step5_charmm2omm.crd  
+      &ensp;&ensp;&ensp;&ensp; step5_charmm2omm.pdb   
+      &ensp;&ensp;&ensp;&ensp; step5_charmm2omm.str   
+      &ensp;&ensp;&ensp;&ensp; step5_charmm2omm.crd  
+      
+ &ensp;&ensp; `step5_charmm2omm.str`:  
+ ```
+* BOXLX    = @A
+* BOXLY    = @B
+* BOXLZ    = @C
+*
+ ```
+ 

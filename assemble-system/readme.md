@@ -49,7 +49,7 @@ The intuition is to use text editing tools to mutate the ions. However, due to c
     599213    147855  CAL       CAL            48.9741087000      -94.2898129000       29.6778919000  POT       471             0.0000000000
   ```
 
-- Generate inputs for simulation program, use OpenMM for example
+- Generate inputs for simulation program, use OpenMM for example  
       &ensp;&ensp; Because of OpenMM's high performance, we mainly use OpenMM for large system simulations these days (6/2019). `step5.1_input.inp` prepare the system for OpenMM simulations.  
   &ensp;&ensp; Inputs:   
       &ensp;&ensp;&ensp;&ensp; step5.1_assembly.psf  

@@ -1,0 +1,138 @@
+* AXIAL AVERAGE ORDER PARAMETER (SCD)
+*
+
+
+BOMLEV -5
+
+!set nsys = 1
+
+! iisn = beginning step
+! ffsn = final step
+! ii   = chain id, 6 in total
+! ica  = first carbon number of chain ii
+! fca  = last carbon number of chain ii
+
+!set lipid = pgar
+
+!Need to be modified
+!set dir = /home/shf317/workdir/@{i}0_men8_pg_zw/namd
+set dir = /home/shf317/workdir/50_men8_pg_zw/namd
+
+set iisn = 1051 
+set ffsn = 1200
+
+!set lipid = pgar ! lipa  Lipid Type
+calc cnt   = @iisn
+calc nct = 1
+calc cntmax = @ffsn - @iisn + 1 !maybe for correl limit calculation
+			        !This calc the maximum number of step
+
+! parameters for carbons
+calc ica = 2 ! begin
+calc fca = 16 ! end
+
+! read topology and parameter files
+stream toppar.str
+
+!Read the system information
+stream @dir/../step5_assembly.str 
+
+! Read PSF and Coordinates
+open read unit 10 card name @dir/../step5_assembly.psf
+read psf  unit 10 card
+
+open read unit 10 card name @dir/../step5_assembly.crd
+read coor unit 10 card
+
+set unum = 18
+LABEL OPENTRJ
+       open read unit @unum file name @dir/step7.@{cnt}.dcd
+       traj query unit @unum
+       incr unum
+       incr cnt
+if cnt .le. @ffsn goto OPENTRJ
+
+
+LABEL LOOPCA
+
+   calc prevca = @ica - 1
+   define X sele resn @lipid .and. type P end
+   calc nlipid = ?nsel
+   calc nleaflet = @nlipid 
+   set resid = ?selresi
+
+
+   set unum = 8
+   calc cnt = @iisn
+   
+   calc nfile = ?NFILE    
+   calc skip  = ?skip    
+   calc begin = ?start
+   
+   !Compute correl limits
+   calc mxa = @nlipid * 6 * 4 
+   calc mxs = @nlipid * 2 * 10 + 10
+   calc mxt = @nfile * @cntmax
+   
+   !prnlev 0
+   !Invoke CORREL
+   correl maxtim @MXT maxa @MXA maxs @MXS
+   
+   !Accumulate averages in these time series; declare in this order
+   enter sr zero
+   
+   !Loop over the lipids; use only z and r of vector
+
+   set lipn 1
+
+   LABEL ELP
+
+        define X sele resn @lipid .and. type P end
+        define XX sele X .subset. @lipn show end
+        set resid = ?selresi
+     
+        !w-1, z-2, z-3;
+        !z:z-axis, r:radius;
+
+        enter w@lipn vect z MEMB @resid C2@{prevca}   MEMB @resid C2@{ica}
+        enter a@lipn vect r MEMB @resid C2@{prevca}   MEMB @resid C2@{ica}
+   
+   incr lipn by 1
+   if lipn .le. @nleaflet goto ELP
+   
+   ! Read trajectories ! 251000 is the ?start number for the first dcd file
+   traj firstu 18 nunit @cntmax skip 50000 begin 505000 ! @begin 
+   !begin 251000 skip @skip !begin @begin skip @skip
+   
+   ! Loop over 20 lipids; norm, calc scd, accum, ensemble average;
+   calc  rn    = 1.0 / @nlipid
+   set   lipn  = 1
+
+   LABEL CLP
+       	!Scd = 1.5*<(costheta)^2> - 0.5
+
+       	mantim w@lipn ratio   a@lipn   ! DIVIDE VECTOR Z BY R (z OF UNIT VECTOR)
+       	mantim w@lipn squa            ! z**2
+       	mantim w@lipn mult   1.5      ! * 3/2
+       	mantim w@lipn shif   -0.5     ! - 1/2
+       	mantim w@lipn mult   @RN      ! * 1/Nlipid
+       	mantim sr     add    w@lipn
+   
+   incr lipn by 1
+   if lipn .le. @nlipid goto CLP
+   
+   open write unit 1 card name @{local}/@lipid-sccc2_@ica.dat
+   write sr unit 1 dumb time
+   * dumb
+   *
+   
+   end
+   
+   prnlev 5
+
+incr ica
+if ica .le. @fca goto LOOPCA
+
+
+stop
+

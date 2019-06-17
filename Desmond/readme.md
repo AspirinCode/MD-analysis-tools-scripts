@@ -1,8 +1,14 @@
-# Process Desmond files 
+# Build Desmond file  
+
+
+# dms-validate and fix
+
+
+# Process Desmond trajectory 
 
 - Retrieve trajectories  
-Login to Kollman account: shashaf@kollman.psc.edu  
-
+Login to Kollman account: shashaf@kollman.psc.edu   
+Type following commands:
 ```shell
   module load vmd/1.9
   vmd -dispdev text initsys.para.dms

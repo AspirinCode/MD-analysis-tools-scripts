@@ -14,7 +14,6 @@ Login to Kollman account: shashaf@kollman.psc.edu
 ```
 
 - Read above converted trajectory in CHARMM script  
-
 The important point is this read in grammar;
 
 ```fortran

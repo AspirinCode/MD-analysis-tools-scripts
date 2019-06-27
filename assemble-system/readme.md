@@ -78,3 +78,7 @@ The intuition is to use text editing tools to mutate the ions. However, due to c
 module load anaconda/python2
 python pentest.py -xtl rect -pbc x_len y_len **.psf **.crd
  ```
+
+ For solving ring penetration issues, one can re-assemble the system or use the script here to orient/translate the molecule and residues to avoid the ring penetraion. Sometimes peptides are modelled by Modeller or other softwares. Since some of they are very long, these programs cannot automatically detect and solve this. 
+ 
+ https://github.com/sha256feng/Model-long-missing-loop

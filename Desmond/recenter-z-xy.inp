@@ -67,16 +67,20 @@ label readtrj
    !centering 1
    coor stat mass sele ( ( segid MEMB ) .and. resid 1 ) end
    coor trans zdir -?zave
+   energy
 
    !centering 2
    coor stat mass sele ( segid MEMB ) .and. .not. hydrogen end
    coor trans zdir -?zave
+   energy
 
    coor stat mass sele segid PROD .and. .not. hydrogen end
    coor trans xdir -?xave ydir -?yave
+   energy
 
    coor stat mass sele segid PRO* .and. .not. hydrogen end
    coor trans xdir -?xave ydir -?yave
+   energy
 
    traj write
 

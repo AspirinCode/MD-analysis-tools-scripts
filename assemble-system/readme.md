@@ -70,3 +70,11 @@ The intuition is to use text editing tools to mutate the ions. However, due to c
 *
  ```
  
+ ## Ring penetration test
+ Since cholesterol and sugar all have rings, we want to avoid such ring penetration in the system. We use the following script `pentest.py` and `findrings.py` to detect the penetration. The periodic boudary parameters are also provided to help detect the penetration between primary and image boxes. `Qhull` is needed for detecting ring penetration on proteins.
+ 
+
+ ```
+module load anaconda/python2
+python pentest.py -xtl rect -pbc x_len y_len **.psf **.crd
+ ```

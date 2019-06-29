@@ -2,7 +2,11 @@
 
 
 ## Generate PDB for a protein sequence  
-Use the `prot_config_gene.inp` and modify the input sequence to desired ones.
+Use the `prot_config_gene.inp` and modify the input sequence to desired ones. The results give four files:  
+- 'xx_xplor.psf': initial psf file;  
+- 'xx_setup.pdb': initial IC Build result;  
+- 'xx_mini.pdb': after 500sd + 500abnr minimization;    
+- 'xx_random.pdb': after 40,000 steps dynamics;
 
 
 ## Need to mutate K<sup>+</sup> to Ca<sup>2+</sup> ions

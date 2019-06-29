@@ -1,0 +1,128 @@
+* For generating initial configuration
+* 
+
+! set p for naming purpose later
+set p turret
+
+bomlev -2
+open unit 1 read card name "top_all36_prot.rtf"
+read rtf card unit 1
+close unit 1
+open unit 1 read card name "par_all36m_prot.prm"
+read param card unit 1
+close unit 1
+
+read sequ card
+* idp sequence
+*
+33
+ARG GLU ALA ARG SER PRO LYS ALA PRO GLU ASP ASN ASN SER THR VAL THR GLU GLN PRO
+THR VAL GLY GLN GLU GLU GLU PRO ALA PRO TYR ARG SER
+
+!44
+!GLY MET ALA SER ASN ASP TYR THR GLN GLN ALA THR GLN SER TYR GLY ALA TYR PRO THR GLN PRO GLY GLN GLY TYR SER GLN GLN SER SER GLN PRO TYR GLY GLN GLN SER TYR SER GLY TYR SER GLN
+
+generate @P last CT2 setup
+
+!autogen angles dihedrals
+
+ic build
+coor init sele all end
+ic para
+ic purge
+
+set helixphi -57.
+set helixpsi -47.
+set strandphi -70.
+set strandpsi 120.
+
+set pres -1
+set res 0
+set nres 1
+
+! s = 0 for strand, s = 1 for helix
+!set s 0
+
+label loopss
+    incr pres by 1
+    incr res by 1
+    incr nres by 1
+
+    if @RES .lt. 10 then
+        set s 0
+    else
+        if @RES .gt. 21 then
+            set s 0
+        else
+            set s 0
+        endif
+    endif
+
+    ! consider above set s = 0
+    ! here we has a strand peptide
+    if @S .eq. 0 then
+        if @RES .ne. 1 then
+            ic edit
+                dihe @PRES C @RES N @RES CA @RES C @STRANDPHI
+            end
+        endif
+        if @RES .ne. ?nres then
+            ic edit
+                dihe @RES N @RES CA @RES C @NRES N @STRANDPSI
+            end
+        endif
+    else
+        if @RES .ne. 1 then
+            ic edit
+                dihe @PRES C @RES N @RES CA @RES C @HELIXPHI
+            end
+        endif
+        if @RES .ne. ?nres then
+            ic edit
+                dihe @RES N @RES CA @RES C @NRES N @HELIXPSI
+            end
+        endif
+    endif
+
+if @RES .lt. ?nres goto loopss
+
+ic print
+
+ic seed 1 n 1 ca 1 c
+ic build
+
+coor print
+
+energy
+
+open unit 10 write card name "@P_setup.pdb"
+coor write pdb unit 10
+close unit 10
+
+open unit 10 write card name "@P_xplor.psf"
+write psf card xplor unit 10
+
+open unit 10 write card name "@P_setup.pdb"
+coor write pdb unit 10
+close unit 10
+
+shake bonh param tol 1.e-7
+
+nbonds cdie eps 80.
+
+mini sd nstep 500
+mini abnr nstep 500
+
+! After minimization
+open unit 10 write card name "@P_mini.pdb"
+coor write pdb unit 10
+close unit 10
+
+dyna start firstt 800 finalt 800 nstep 40000 deltat 0.002
+
+! After some dynamics
+open unit 10 write card name "@P_random.pdb"
+coor write pdb unit 10
+close unit 10
+
+stop

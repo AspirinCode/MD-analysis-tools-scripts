@@ -43,3 +43,20 @@ echo -e "
 #jupyter notebook --no-browser --port=$ipnport --ip=$ipnip
 jupyter lab --port=$ipnport --ip=$ipnip --no-browser
 ```
+
+## A simple version on remost machine without Slurm scheduler  
+
+```
+# type in remost host terminal connected by SSH:
+jupyter notebook --port=9000 --no-browser &
+
+# type in local terminal
+ssh -N -f -L 8888:localhost:9000 remost-machine-address
+
+# type localhost:8888 in web browser 
+# may ask for setting up the password
+
+# sometimes, for closing the tunnerl to restart new one:
+Sudo lsof -i :5432 # get the port and job id, then kill the procedure
+
+```

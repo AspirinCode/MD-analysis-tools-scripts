@@ -79,4 +79,21 @@ pbc box #draw the pbc box
 pdb box -off #unshow the box
 graphics 0 line {-4 -50 0} {-4 50 0} width 4 #draw the line on mol0
 
+# In the case of no existing pbc box
+vmd > set cell [pbc set {250 250 40000} -all]
+vmd > pbc box -center origin -color black -width 1
+
+# static pdc box
+pbc box -center bb -color green # bb: bounding box
+set box0 [pbc box_draw] # default color: blue
+set box2 [pbc box_draw -center com -color red] # use center-of-mass as center
+
+```
+
+- Style set-up: 
+```
+for { set i 0 } { $i < $n } { incr i } {
+mol modstyle 0 $i NewCartoon 0.300000 10.000000 4.100000 0 
+}
+
 ```

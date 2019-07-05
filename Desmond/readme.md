@@ -13,6 +13,8 @@ Type following commands:
   module load vmd/1.9
   vmd -dispdev text initsys.para.dms
   vmd > animate read dtr workdir.1/run.stk waitfor all
+  # vmd > read file_type filename [beg nb] [end ne ] [skip ns] [waitfor nw] [molecule_number] 
+  # We can also specify begin from which frame to reduce the load;
   vmd > molinfo 0 get numframes
   vmd > 41
   vmd > animate delete beg 0 end 1 skip 1 0

@@ -97,3 +97,21 @@ mol modstyle 0 $i NewCartoon 0.300000 10.000000 4.100000 0
 }
 
 ```
+
+- Operate on coordinates and turn them into one dcd file  
+```
+# load the structure and original set of coordinates 
+mol load psf $start_psf pdb $start_pdb 
+set whole [atomselect top all] 
+set frame 0 
+(loop begins here) 
+   # add new frame to the trajectory, with coords copied from previous frame 
+   animate dup frame $frame 0 
+   incr frame 
+   animate goto $frame 
+   # modify coords of new frame 
+   (do your own thing here) 
+} 
+# write the complete trajectory to disk 
+animate write dcd $final_dcd beg 0 end $frame waitfor all 
+```

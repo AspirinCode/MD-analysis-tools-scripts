@@ -26,7 +26,7 @@ rotate y by 2
 
 - ffmpeg commands: 
 ```
-ffmpeg -i untitled.%05d.ppm -vcodec mpeg4 -b 2G test_junk.mp4
+ffmpeg -r 24 -i untitled.%05d.ppm -vcodec mpeg4 -b 2G test_junk.mp4
 ```
 
 - script for RMS alignment:  

@@ -24,6 +24,11 @@ rotate y by 2
 }
 ```
 
+- ffmpeg commands: 
+```
+ffmpeg -i untitled.%05d.ppm -vcodec mpeg4 -b 2G test_junk.mp4
+```
+
 - script for RMS alignment:  
 ```
 >>>set sel1 [atomselect 0 "backbone and resid 494 to 515 519 to 556"]

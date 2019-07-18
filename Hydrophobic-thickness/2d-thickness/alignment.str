@@ -1,0 +1,59 @@
+"bob-copy-SF.py" [dos] 188L, 6683C
+* align the COM of the vector M2-M1 to the X-axis
+*
+
+coor stat mass sele TM end
+calc xcom1 = ?xave
+calc ycom1 = ?yave
+calc zcom1 = ?zave
+
+coor stat mass sele AH1 .or. AH2 end
+calc xcom2 = ?xave
+calc ycom2 = ?yave
+calc zcom2 = ?zave
+
+! calculate the vector
+calc vecx = @xcom1 - @xcom2
+calc vecy = @ycom1 - @ycom2
+calc vecr = @vecx * @vecx + @vecy * @vecy
+calc vecr = sqrt( @vecr )
+calc vecx = @vecx / @vecr
+calc vecy = @vecy / @vecr
+
+calc cost = @vecx * 1 + @vecy * 0
+calc theta = acos( @cost ) * @rtd
+
+!!! find the rotation axis
+!!! v (x) x-axi
+!!! i   j   k
+!!! vx  vy  0
+!!! 1   0   0
+calc rotaxi = -@vecy
+
+!! coor stat sele TM1 .or. TM2 end
+!! coor trans xdir -?xave ydir -?yave zdir -?zave sele all end
+!! coor rota  xcen 0 ycen 0 zcen 0 zdir @rotaxi phi -@theta sele all end
+
+! treat small value of rotaxi
+if @rotaxi .lt. 0.0 then
+  calc rotaxi = -1.0
+endif
+if @rotaxi .gt. 0.0 then
+  calc rotaxi = 1.0
+endif
+
+
+!
+! Clustering strategy
+! 0. bilayer recentering
+! 1. align COM of TM1+TM2 at the origin
+! 2. do rotation so that the vector connecting M2-M1 along the x-axis
+!
+coor stat mass sele TM .or. AH1 .or. AH2 end
+!! !! ! allow only xy recentering & rotation
+!! coor trans xdir -?xave ydir -?yave zdir -?zave sele all end
+coor trans xdir -?xave ydir -?yave sele all end
+energy
+
+!! calc rz = ?zave ! value of z-translation to be applied for bilayer-recentered pdb extract
+coor rota  xcen 0 ycen 0 zcen 0 zdir @rotaxi phi -@theta sele all end

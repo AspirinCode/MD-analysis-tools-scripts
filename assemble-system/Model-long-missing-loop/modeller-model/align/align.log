@@ -1,0 +1,52 @@
+
+                         MODELLER 9.21, 2018/12/06, r11301
+
+     PROTEIN STRUCTURE MODELLING BY SATISFACTION OF SPATIAL RESTRAINTS
+
+
+                     Copyright(c) 1989-2018 Andrej Sali
+                            All Rights Reserved
+
+                             Written by A. Sali
+                               with help from
+              B. Webb, M.S. Madhusudhan, M-Y. Shen, G.Q. Dong,
+          M.A. Marti-Renom, N. Eswar, F. Alber, M. Topf, B. Oliva,
+             A. Fiser, R. Sanchez, B. Yerkovich, A. Badretdinov,
+                     F. Melo, J.P. Overington, E. Feyfant
+                 University of California, San Francisco, USA
+                    Rockefeller University, New York, USA
+                      Harvard University, Cambridge, USA
+                   Imperial Cancer Research Fund, London, UK
+              Birkbeck College, University of London, London, UK
+
+
+Kind, OS, HostName, Kernel, Processor: 4, Linux sol.cc.lehigh.edu 3.10.0-957.12.2.el7.x86_64 x86_64
+Date and time of compilation         : 2018/12/06 09:58:12
+MODELLER executable type             : x86_64-intel8
+Job starting time (YY/MM/DD HH:MM:SS): 2019/07/31 15:13:05
+
+mkapsa__637W> No residue topology library is in memory.
+              Better radii would be used if topology.read() is called first.
+iup2crm_280W> No topology library in memory or assigning a BLK residue.
+              Default CHARMM atom type assigned:  N -->  N
+              This message is written only for the first such atom.
+
+Pairwise dynamic programming alignment (ALIGN2D):
+  Residue-residue metric   : $(LIB)/as1.sim.mat
+  Diagonal                 :          100
+  Overhang                 :            0
+  Maximal gap length       :       999999
+  Local alignment          :            F
+  MATRIX_OFFSET (local aln):       0.0000
+  FIX_OFFSETS              :      0.0    -1.0    -2.0    -3.0    -4.0
+  N_SUBOPT                 :            0
+  SUBOPT_OFFSET            :       0.0000
+  Alignment block          :            1
+  Gap introduction penalty :    -100.0000
+  Gap extension penalty    :       0.0000
+  Gap diagonal penalty     :       0.0000
+  Structure gap penalties  :    3.500   3.500   3.500   0.200   4.000   6.500   2.000   0.000
+  Break-break bonus        :   10000.0000
+  Length of alignment      :          655
+  Score                    :  536271.1250
+Total CPU time [seconds]                                 :     219.18

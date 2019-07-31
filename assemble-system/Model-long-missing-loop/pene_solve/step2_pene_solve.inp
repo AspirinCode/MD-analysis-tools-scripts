@@ -1,0 +1,83 @@
+DIMENS CHSIZE 3000000 MAXRES 3000000
+
+! Read topology and parameter files
+stream toppar.str
+
+! Read PSF
+open read unit 10 card name step1_pdbreader.psf
+read psf  unit 10 card
+
+! Read Coordinate
+open read unit 10 card name step1_pdbreader.crd 
+read coor unit 10 card
+
+! This is for whole assembly with periodic boundary
+!stream step5.1_assembly.str
+!
+!set A = 184.824901
+!set B = 184.824901
+!set C = 162.829253
+
+! No crystal image needed here
+!open read unit 10 card name crystal_image.str
+!CRYSTAL DEFINE @XTLtype @A @B @C @alpha @beta @gamma
+!CRYSTAL READ UNIT 10 CARD
+
+!
+! Nonbonded Options [short distances and no pme just for image centering]
+!
+
+nbonds atom vatom vfswitch bycb -
+       ctonnb 4.0 ctofnb 5.0 cutnb 6.0 cutim 6.0 -
+       inbfrq -1 imgfrq -1 wmin 1.0 cdie eps 1.0 -
+!        ewald pmew fftx @fftx ffty @ffty fftz @fftz  kappa .34 spline order 6
+energy
+
+define movable sele segid PROB .and. ( resi 490 .or. resi 491 .or. resi 492 -
+                        .or. resi 493 .or. resi 494 .or. resi 495 .or. resi 496 -
+                        .or. resi 496 .or. resi 497 .or. resi 498 .or. resi 499 -
+                        .or. resi 500 .or. resi 501 .or. resi 502 .or. resi 503 -
+                        .or. resi 504 .or. resi 505 .or. resi 506 .or. resi 507 -
+                        .or. resi 508 .or. resi 509 .or. resi 510 .or. resi 511 ) end
+                    ! ( type C22 .or. type C23 .or. type C24 . ) end
+
+! Sometimes we may need to move two chains at the same time to solve ring penetration
+!define movable2 sele segid PROC .and. ( resid 610 .or. resid 611 .or. resid 612 -
+!                        .or. resi 613 .or. resi 614 ) end
+
+coor stat sele segid PROB .and. ( resi 490 .or. resid 511 ) .and. type CA end
+
+set xc ?xave
+set yc ?yave
+set zc ?zave
+
+
+! Choose either to rotate or translate, here rotation is used
+coor rota xcen @xc ycen @yc zcen @zc xdir 1.0 phi -90 sele movable end
+!coor trans xdir -3 ydir 5 zdir 0 sele movable2 end
+
+cons fix sele .not. movable  end
+
+nbonds atom vatom vfswitch bycb -
+       ctonnb 4.0 ctofnb 5.0 cutnb 6.0 cutim 6.0 -
+       inbfrq -1 imgfrq -1 wmin 1.0 cdie eps 1.0 -
+
+mini sd nstep 100
+mini abnr nstep 100
+
+cons fix sele none end
+
+mini sd nstep 100
+mini abnr nstep 100
+
+open write unit 20 card name step2_pene_resolved.crd
+write coor unit 20 card
+
+! official format has chain ID assigned
+open write unit 10 card name step2_pene_resolved.pdb
+write coor unit 10 pdb official
+
+open write unit 10 card name step2_pene_resolved.pdb
+write coor unit 10 pdb
+
+stop

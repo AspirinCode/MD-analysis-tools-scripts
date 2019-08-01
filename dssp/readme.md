@@ -62,10 +62,22 @@ Furthere processing to get more frames to form a time trajectory.
 
 
 Reference:  
+
 A tutorial of Gromacs DSSP analysis:  
 http://www.strodel.info/index_files/lecture/html/analysis.html   
 
 Gromacs do_dssp command:  
 http://manual.gromacs.org/archive/5.0.7/programs/gmx-do_dssp.html  
  
+DSSP official document:  
+https://swift.cmbi.umcn.nl/gv/dssp/DSSP_3.html   
+
+A blog giving me inspiration to develop my script:  
+https://bougui505.github.io/2016/08/26/compute_secondary_structure_content_from_a_dcd_trajectory_file_using_python,_mdanalysis_and_dssp.html  
+
+SSBIO's DSSP tool:  
+https://ssbio.readthedocs.io/en/latest/instructions/dssp.html   
+
+Biopython's DSSP tool:  
+https://github.com/biopython/biopython/blob/master/Bio/PDB/DSSP.py   
 

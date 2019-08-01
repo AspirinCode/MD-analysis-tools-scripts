@@ -59,3 +59,13 @@ print(dssp)
 ```
 
 Furthere processing to get more frames to form a time trajectory.
+
+
+Reference:  
+A tutorial of Gromacs DSSP analysis:  
+http://www.strodel.info/index_files/lecture/html/analysis.html   
+
+Gromacs do_dssp command:  
+http://manual.gromacs.org/archive/5.0.7/programs/gmx-do_dssp.html  
+ 
+

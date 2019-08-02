@@ -1,0 +1,71 @@
+define tail1 sele ( ( resname *LIP* ) .and. ( type C1* .or. type C2* .or. type C3* .or. type C5* .or. type C6* .or. type C7* ) - 
+                    .and. .not. ( type C+1 .or. type C+2 .or. type C+3 ) - 
+                    .or. ( type C22 .or. type C23 .or. type C62 .or. type C63 ) ) end
+
+define tail2 sele ( ( resname PPPE .or. resname PVPG ) .and. ( type C2* .or. type C3* ) -
+                    .and. .not. ( type C+1 .or. type C2 .or. type C3 ) ) end
+
+define tail3 sele ( ( resname PVCL2 ) .and. ( type CA* .or. type CB* .or. type CC* .or. type CD* ) -
+                    .and. .not. ( type C%1 ) ) end
+
+define lpstail sele tail1 end
+define pltail sele tail2 .or. tail3 end
+
+define PAB sele ( resname *LIP* .and. type PA .or. type PB ) end
+define P2 sele (segid MEMB .and. ( type P .or. type P1 .or. type P3 ) ) end
+
+define PO4 sele PAB .or. P2 end
+
+define lpshead sele ( ( resname *LIP* ) .and. ( type PA .or. type PB .or. type CA+ -
+                      .or. type CB+ .or. type OPA+ .or. type OPB+ .or. type OB+ -
+                      .or. type OA+ ) ) end
+
+define bht sele resname *LIP* .and. .not. lpshead .and. .not. tail1 end
+
+define plhead1 sele ( ( resn PPPE .or. resn PVPG ) .and. -
+                    ( type P .or. type N .or. type C1+ .or. type O1+ .or. type OC+ ) ) show end
+define plhead2 sele ( ( resn PVCL2 ) .and. -
+                    ( type P+ .or. type OP1+ .or. type OP3+ .or. type OG12 .or. type C+ ) ) end
+
+define plhead sele plhead1 .or. plhead2 show end
+
+define COO sele ( resname AKDO .and. type C1 ) end
+
+define carbonyl1 sele ( ( resname *LIP* ) .and. ( type C+1 .or. type O+1 ) ) end
+
+define carbonyl2 sele ( ( resname PPPE .or. resname PVPG ) -
+                          .and. ( type C21 .or. type O22 -
+                          .or. type C31 .or. type O32 ) ) end
+define carbonyl3 sele ( ( resname PVCL2 ) .and. ( type C%1 .or. type O%1 ) .and. -
+                       .not. (type C+1 .or. type O+1 ) )end
+
+define carbonyl sele carbonyl1 .or. carbonyl2 .or. carbonyl3 end
+
+define KDO    sele ( segid LP* .and. resid 2:3  .and. .not. hydrogen ) end
+define INCOR0 sele ( segid LP* .and. resid 4:6  .and. .not. hydrogen ) end
+define INCOR  sele ( segid LP* .and. resid 2:6  .and. .not. hydrogen ) end
+define OUTCOR  sele ( segid LP* .and. resid 7:11  .and. .not. hydrogen ) end
+
+define WAT sele ( resn TIP3 .and. type O* ) end
+
+define CH3 sele ( resname *LIP* .and. ( type C114 .or. type C212 .or. type C312 -
+                                .or. type C514 .or. type C612 .or. type C712 ) ) end
+
+define CAL sele ( segid CAL ) end
+define POT sele ( segid POT ) end
+define CLA sele ( segid CLA ) end
+
+define PROT sele segid PROA end
+define bb   sele ( type C .or. type O .or. type N  .or. type CA ) .and. PROT end
+
+define last1 sele ( resname *LIP* .and. ( type C114 .or. type C212 .or. type C312 -
+                                   .or. type C514 .or. type C612 .or. type C712 ) ) end
+
+define last2 sele ( type C316 .or. type C216 ) .and. resn PPPE -
+          .and. ( type C316 .or. type C218 ) .and. resn PVPG -
+          .and. ( type CB16 .or. type CA18 .or. type CD16 .or. type CC18 ) .and. resn PVCL2 end
+
+define loop1 sele resid  16 :  54 .and. BB .and. PROT end
+define loop2 sele resid  72 : 114 .and. BB .and. PROT end
+define loop3 sele resid 143 : 190 .and. BB .and. PROT end
+define loop4 sele resid 213 : 229 .and. BB .and. PROT end

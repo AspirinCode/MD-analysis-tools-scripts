@@ -12,6 +12,8 @@ Type following commands:
 ```shell
   module load vmd/1.9
   vmd -dispdev text initsys.para.dms
+  
+  # This step can be very slow because of waitfor all
   vmd > animate read dtr workdir.1/run.stk waitfor all
   
   # vmd > read file_type filename [beg nb] [end ne ] [skip ns] [waitfor nw] [molecule_number] 
@@ -29,7 +31,9 @@ Type following commands:
 The important point is this read in grammar;
 
 ```fortran
-
+   traj firstu 11 nunit 1 skip @skip begin 0 stop @nfile iwrite 22
+   !traj iread 11 begin 0 stop 417 iwrite 22 nfile 1
+   !traj iread 11 iwrite 22 nread 1 begin @start skip @skip
 ```
 
 - Processing

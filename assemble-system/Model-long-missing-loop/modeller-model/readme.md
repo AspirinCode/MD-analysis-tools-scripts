@@ -1,12 +1,13 @@
 ## Use Modeller & other tools to model the loop  
 
 
-0. Preprocess
+## 0. Preprocess
 - Use VMD to write PDB file for each chain for multi-subunit protein;  
 Because currently I am not able to figure out multimeric protein loop modeling in Modeller;
 
-1. Modeller  
-- Use `/align/align.py` to generate the sequence alignment `two-component.ali`;  
+## 1. Modeller  
+### 1.1 Align sequence and PDB structure sequence  
+Use `/align/align.py` to generate the sequence alignment `two-component.ali`;  
 This is going to guide the `loopmodel` module what residues to add for missing loops. Also it would be good to name both the PDB and the sequence `ali` file to both four-letter name, eg., "m1v2", "t1v2". Not sure if otherwise Modeller still works.  
 
 Code snippet:  
@@ -22,11 +23,12 @@ aln.write(file='two-alignment.ali', alignment_format='PIR')
 aln.write(file='two-alignment.pap', alignment_format='PAP')
 ```
 
-- Use `mod-seg.py` to model the missing residues;  
+### 1.2 Model the missing residues  
+  Use `mod-seg.py` to model the missing residues;  
 Note:   
--If the protein does not start from residue 1, then in this script the residue ID all regard the first residue appearing in PDB file as residue 1. So you might need to do some calculation to convert the residue ID.  
--Here Python class `loopmodel` is used instead of `automodel`, because in `automodel` other residues will also be modified during energy minimization. Here we hope only the missing residues get modelled while other residues are kept as the original.  
--One might also choose to have more models generated, here only two models will be generated.
+- If the protein does not start from residue 1, then in this script the residue ID all regard the first residue appearing in PDB file as residue 1. So you might need to do some calculation to convert the residue ID.  
+- Here Python class `loopmodel` is used instead of `automodel`, because in `automodel` other residues will also be modified during energy minimization. Here we hope only the missing residues get modelled while other residues are kept as the original.  
+- One might also choose to have more models generated, here only two models will be generated.
 
 Code snippet:  
 ```

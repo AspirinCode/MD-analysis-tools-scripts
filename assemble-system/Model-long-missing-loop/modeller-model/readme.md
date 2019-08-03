@@ -72,6 +72,50 @@ a.make()                            # do modeling and loop refinement
 - Result  
 The result would be a number of log files and PDB files with names eg., "t1v2.BL00010001.pdb", "t1v2.BL00020001.pdb". Visualize the PDB files and check if there is broken chain. If some part is broken, you need to adjust the residue range to one or two residues. Also, make sure the residue range is given correctly given the missing N-terminal residues.  
 
+### 1.3 Model the missing residues -- repeat for other monomers 
+
+## 2. Concatenate the PDB files of monomers  
+Use `cat` and `vim` to concatenate the PDB files. Add chain names to PDB file, using `ctrl+v` to do block selection.  
+
+## 3. Coot processing   
+After the monomers get concatenated together, there are knots and crashes. We need to fix them. Coot is a good tool.
+Open PDB structure in Coot and do `Rotate and Translation` in Coot: select the loop residue range, shift the bars of x, y, z translation and rotation, also a bit manual drag on coot GUI. It might take a while to get a feel for the translation and rotation bars. But they work ideally great!  
+
+If the structure looks good, then save the coordinates by adding a name with "coot" suffix. (Good naming habits are also appreciated.)  
+
+## 4. CHARMM minimization  
+After our juggling of the PDB structure, we need to make it more reasonable to feed to MD simulations. So we use the following CHARMM script to minimize the structure.  
+### 4.1 Use CHARMM-GUI PDBReader to get PSF and CRD file  
+Upload the structure to CHARMM-GUI's PDBReader (http://charmm-gui.org/?doc=input/pdbreader) and download the PSF and CRD file. Because we already have `toppar` parameter files on server, otherwise, also download the `toppar` files or the whole tar file.  
+
+### 4.2 CHARMM minimization  
+Use following script to fix other parts beside the missing loops and do two rounds of minimization. 
+Code snippet: 
+```
+!
+! Nonbonded Options [short distances and no pme just for image centering]
+!
+
+nbonds atom vatom vfswitch bycb -
+       ctonnb 4.0 ctofnb 5.0 cutnb 6.0 cutim 6.0 -
+       inbfrq -1 imgfrq -1 wmin 1.0 cdie eps 1.0 -
+!        ewald pmew fftx @fftx ffty @ffty fftz @fftz  kappa .34 spline order 6
+energy
+
+define movable sele segid PRO* .and. ( ( resid 341 : 358 ) .or. -
+        ( resid 485 : 518 ) ) end
+
+cons fix sele .not. movable  end
+
+mini sd nstep 100
+mini abnr nstep 100
+mini sd nstep 100
+mini abnr nstep 100
+
+open write unit 10 card name minimized.pdb
+write coor unit 10 pdb
+```
+
 ## Appendix
 - "two-alignment.ali"  
 ```

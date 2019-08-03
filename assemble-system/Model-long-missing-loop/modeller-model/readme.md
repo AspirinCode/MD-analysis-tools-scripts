@@ -116,6 +116,14 @@ open write unit 10 card name minimized.pdb
 write coor unit 10 pdb
 ```
 
+## 5. Assemble the system: Membrane Builder
+We first upload it to OPM server ( https://opm.phar.umich.edu/ppm_server ) to predict the transmembrane domain and wait for a few minites to get the oriented PDB file. There is one problem with such previous processing -- the 'HIS' is named to 'HSD'. OPM thus named the 'HSD' residues to be 'HETATM', which later would confuse CHARMM-GUI and ask you to upload the parameters for 'HSD' residue. So use Vim to edit the 'HETATM' to 'ATOM' by typing `:%s/HETATM/ATOM  /g`.  
+
+We then upload it to CHARMM-GUI Membrane Builder and select the PDB type as 'CHARMM'. Next steps are farmilar, but no need to do more orientations. 
+
+__Hope your protein processing goes successfully!__ 
+
+
 ## Appendix
 - "two-alignment.ali"  
 ```

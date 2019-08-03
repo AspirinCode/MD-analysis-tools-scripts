@@ -29,6 +29,13 @@ Note:
 - If the protein does not start from residue 1, then in this script the residue ID all regard the first residue appearing in PDB file as residue 1. So you might need to do some calculation to convert the residue ID.  
 - Here Python class `loopmodel` is used instead of `automodel`, because in `automodel` other residues will also be modified during energy minimization. Here we hope only the missing residues get modelled while other residues are kept as the original.  
 - One might also choose to have more models generated, here only two models will be generated.
+- For a home-tetramer protein, the "two-alignment.ali" can be used for each chain. But small modification is required. We need to change the letter 'A' to designate letters like 'B', 'C', 'D'. 
+
+File "two-component.ali" header (for a full view of the file, please jump to end): 
+```
+>P1;m1v2
+structureX:m1v2.pdb:  76 :A:+605 :A:::-1.00:-1.00
+```
 
 Code snippet:  
 ```
@@ -61,4 +68,34 @@ a.loop.starting_model = 1           # First loop model
 a.loop.ending_model   = 2           # Last loop model
 
 a.make()                            # do modeling and loop refinement
+```
+- Result  
+The result would be a number of log files and PDB files with names eg., "t1v2.BL00010001.pdb", "t1v2.BL00020001.pdb". Visualize the PDB files and check if there is broken chain. If some part is broken, you need to adjust the residue range to one or two residues. Also, make sure the residue range is given correctly given the missing N-terminal residues.  
+
+## Appendix
+- "two-alignment.ali"  
+```
+>P1;m1v2
+structureX:m1v2.pdb:  76 :A:+605 :A:::-1.00:-1.00
+-DRDRLFSVVSRGVPEELTGLLEYLRWNSKYLTDSAYTEGSTGKTCLMKAVLNLQDGVNACIMPLLQIDKDSGNP
+KLLVNAQCTDEFYQGHSALHIAIEKRSLQCVKLLVENGADVHLRACGRFFQKHQGTCFYFGELPLSLAACTKQWD
+VVTYLLENPHQPASLEATDSLGNTVLHALVMIADNSPENSALVIHMYDGLLQMGARLCPTVQLEEISNHQGLTPL
+KLAAKEGKIEIFRHILQREFSGPYQPLSRKFTEWCYGPVRVSLYDLSSVDSWEKNSVLEIIAFHCKSPNRHRMVV
+LEPLNKLLQEKWDRLVSRFFFNFACYLVYMFIFTVVAYHQPG--------------ESMLLLGHILILLGGIYLL
+LGQLWYFWRRRLFIWISFMDSYFEILFLLQALLTVLSQVLRFMETEWYLPLLVLSLVLGWLNLLYYTRGFQHTGI
+YSVMIQKVILRDLLRFLLVYLVFLFGFAVALVSLSRY-----------------------------RSILDASLE
+LFKFTIGMGELAFQEQLRFRGVVLLLLLAYVLLTYVLLLNMLIALMSETVNHVADNSWSIWKLQKAISVLEMENG
+YWWCRRKKHREGRLLKVG------PDERWCFRVEEVNWAAWEKTLPTLSEDPSGP*
+
+>P1;t1v2
+sequence:t1v2:     : :     : ::: 0.00: 0.00
+FDRDRLFSVVSRGVPEELTGLLEYLRWNSKYLTDSAYTEGSTGKTCLMKAVLNLQDGVNACIMPLLQIDKDSGNP
+KLLVNAQCTDEFYQGHSALHIAIEKRSLQCVKLLVENGADVHLRACGRFFQKHQGTCFYFGELPLSLAACTKQWD
+VVTYLLENPHQPASLEATDSLGNTVLHALVMIADNSPENSALVIHMYDGLLQMGARLCPTVQLEEISNHQGLTPL
+KLAAKEGKIEIFRHILQREFSGPYQPLSRKFTEWCYGPVRVSLYDLSSVDSWEKNSVLEIIAFHCKSPNRHRMVV
+LEPLNKLLQEKWDRLVSRFFFNFACYLVYMFIFTVVAYHQPSLDQPAIPSSKATFGESMLLLGHILILLGGIYLL
+LGQLWYFWRRRLFIWISFMDSYFEILFLLQALLTVLSQVLRFMETEWYLPLLVLSLVLGWLNLLYYTRGFQHTGI
+YSVMIQKVILRDLLRFLLVYLVFLFGFAVALVSLSREARSPKAPEDNNSTVTEQPTVGQEEEPAPYRSILDASLE
+LFKFTIGMGELAFQEQLRFRGVVLLLLLAYVLLTYVLLLNMLIALMSETVNHVADNSWSIWKLQKAISVLEMENG
+YWWCRRKKHREGRLLKVGTRGDGTPDERWCFRVEEVNWAAWEKTLPTLSEDPSGP*
 ```

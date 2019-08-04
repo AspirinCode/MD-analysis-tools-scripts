@@ -15,6 +15,7 @@ Type following commands:
   
   # This step can be very slow because of waitfor all
   vmd > animate read dtr workdir.1/run.stk waitfor all
+  # An alternative could be: > animate read dtr workdir.1/run.stk beg 4168 end 6250 waitfor all
   
   # vmd > read file_type filename [beg nb] [end ne ] [skip ns] [waitfor nw] [molecule_number] 
   # We can also specify begin from which frame to reduce the load;

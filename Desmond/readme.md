@@ -7,7 +7,7 @@
 # Process Desmond trajectory 
 
 - Retrieve trajectories  
-Login to Kollman account: shashaf@kollman.psc.edu   
+Login to Kollman account: user_id@kollman.psc.edu   
 Type following commands:
 ```shell
   module load vmd/1.9

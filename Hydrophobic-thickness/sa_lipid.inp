@@ -1,0 +1,7 @@
+      calc xlen = ?xtla
+      calc ylen = ?xtlb
+      calc sa = @xlen * @ylen / 100
+
+      write title unit 51
+      * @time @sa @xlen @ylen
+      *

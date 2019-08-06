@@ -3,6 +3,55 @@
 
 # dms-validate and fix
 
+```
+garden load v2software/1.34.0c7/bin
+garden load msys/1.7.213c7/bin
+
+# This command outputs all the validation results
+dms-validate initsys.para.dms --all
+
+# Following command is used to fix the Oxygen weight problem;
+dms-fix-mass pre-fix-initsys.dms -o initsys.para.dms
+```
+
+# Work with DMS system  
+Check the simulation time:  
+```
+# Load the latest version of msys software;
+garden load msys/1.7.213c7/bin
+
+fsdump --match=time workdir.1/000001/run.dtr
+>>> ...  time=98880 {
+  }
+  time=99120 {
+  }
+  time=99360 {
+  }
+  time=99600 {
+  }
+  time=99840 {
+  }
+  time=100080 {
+  }
+}
+``` 
+
+Look at other fields and data in every frame in a frameset:  
+```
+# Look at the checkpoints taken during the first successful job step:
+# Option --max=4 means "show only the first 4 elements of any array".
+fsdump --max=4 $RAW/system_name/workdir/000000/checkpoint.atr
+
+# For the trajectory frames from the first successful jobstep:
+fsdump --max=4 $RAW/system_name/workdir/000000/run.dtr
+
+# Print system size from dtr trajectory:
+fsdump --match=UNITCELL $RAW//workdir/000000/run.dtr
+
+# For more options 
+fsdump --help
+```
+
 
 # Process Desmond trajectory 
 

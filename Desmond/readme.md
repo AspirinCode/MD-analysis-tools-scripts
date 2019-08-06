@@ -1,7 +1,7 @@
 # Build Desmond file  
 
 
-# dms-validate and fix
+# Validation: dms-validate and fix
 
 ```
 garden load v2software/1.34.0c7/bin
@@ -80,7 +80,11 @@ fsdump --max=4 $RAW/system_name/workdir/000000/run.dtr
 fsdump --match=UNITCELL $RAW//workdir/000000/run.dtr
 
 # For more options 
-fsdump --help
+fsdump --help 
+
+# Write the last frame to DMS file 
+# An example to extract from the last checkpoint of a 10 ns run
+dms-frame input.dms output.dms -t 10000 -i $workdir/000000/checkpoint.atr/
 ```
 
 

@@ -41,6 +41,37 @@ Look at other fields and data in every frame in a frameset:
 # Look at the checkpoints taken during the first successful job step:
 # Option --max=4 means "show only the first 4 elements of any array".
 fsdump --max=4 $RAW/system_name/workdir/000000/checkpoint.atr
+>>> {
+  size=14
+  time=2640 {
+    ANTON2_CHECKPOINT_GC_BAROSTAT[496 x unsigned char]= ...
+    ANTON2_CHECKPOINT_GC_THERMOSTAT[768 x unsigned char]= ...
+    ANTON2_CHECKPOINT_ITEMS[56 x unsigned char]= ...
+    BOX[3 x uint32_t]= 422418944 422418944 457394432
+    CHARGESCALE[1 x double]= 2.048
+    CHEMICALTIME[1 x double]= 2640
+    DRUDEMOMENTUMSHIFT[1 x int32_t]= 0
+    ENERGYSCALE[1 x double]= 4000
+    FORCESCALE[1 x double]= 4000
+    FORMAT[13 x char]= "ANTO..."
+    INPUT_ARK[3539 x char]= "anto..."
+    ISROGUE[1 x uint32_t]= 0
+    KE2[3 x float]= 63628.836 63834.578 63829.852
+    KE_RAW[3 x int32_t]= 95536949 95845864 95838771
+    KE_RAW_GROUPS[3 x int32_t]= 95536949 95845864 95838771
+    KIN_ENERGY[1 x float]= 377619.5
+    MASSSCALE[1 x double]= 0.0023850860420650097
+    MOMENTUM[1798086 x int32_t]= -3960077 -145638011 -95279856 -5977088 ...
+    MOMENTUMSCALE[1 x double]= 2.5812096669940319
+    POSITION[1798086 x int32_t]= -111456176 107209881 60722106 -113481160 ...
+    POSITIONSCALE[1 x double]= 887.26584723149631
+    PROCESSOR[9 x char]= "anto..."
+    PROVENANCE[31 x char]= "anto..."
+    STEP[1 x double]= 2640000
+    TIMESCALE[1 x double]= 0.001
+    TITLE[5 x char]= "ANTO..."
+  }
+
 
 # For the trajectory frames from the first successful jobstep:
 fsdump --max=4 $RAW/system_name/workdir/000000/run.dtr

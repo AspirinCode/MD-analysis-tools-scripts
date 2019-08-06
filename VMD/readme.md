@@ -120,3 +120,14 @@ set frame 0
 # write the complete trajectory to disk 
 animate write dcd $final_dcd beg 0 end $frame waitfor all 
 ```
+- catdcd.sh: echo the catdcd command for large dcd file to concatenate together.
+
+```
+#!/bin/bash
+printf "catdcd -o merged1.dcd "
+
+for i in {1..250}
+do
+  printf "archglip_snap_${i}.dcd "
+done
+```

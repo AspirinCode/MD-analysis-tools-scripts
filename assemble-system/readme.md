@@ -79,6 +79,9 @@ The intuition is to use text editing tools to mutate the ions. However, due to c
 *
  ```
  
+ ## Place certain lipids at specific positions  
+ In step3, first visualize "step3_packing.pdb" to see which pairs of lipids to exchange the position. At step3, lipids are only pseudo-atoms and thus can be mutated to desired lipid type easily. Picking up the pairs for exchange, we then text modify "step3_packing_head.psf" and "step3_packing_head.crd" to exchange the lipid positions. Remember also to modify the related charges in PSF file.
+ 
  ## Ring penetration test
  Since cholesterol and sugar all have rings, we want to avoid such ring penetration in the system. We use the following script `pentest.py` and `findrings.py` to detect the penetration. The periodic boudary parameters are also provided to help detect the penetration between primary and image boxes. `Qhull` is needed for detecting ring penetration on proteins.
  

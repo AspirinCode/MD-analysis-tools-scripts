@@ -143,4 +143,10 @@ for { set i 0 } { $i < $numframe } { incr i } {
     set prot [atomselect 0 "protein"]
     $prot writepdb pdb_dir/frame$i.pdb
 }
-```
+``` 
+
+Reference links:  
+VMD command-line options: https://www.ks.uiuc.edu/Research/vmd/current/ug/node246.html  
+VMD list of commands: https://www.ks.uiuc.edu/Research/namd/2.10b1/ug/node19.html   
+VMD's mol function: https://www.ks.uiuc.edu/Research/vmd/current/ug/node140.html  
+

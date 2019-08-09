@@ -65,7 +65,7 @@ a.starting_model= 1                 # index of the first model
 a.ending_model  = 1                 # index of the last model
 
 a.loop.starting_model = 1           # First loop model
-a.loop.ending_model   = 2           # Last loop model
+a.loop.ending_model   = 2           # Last loop model, more models mean more alternatives to choose from
 
 a.make()                            # do modeling and loop refinement
 ```

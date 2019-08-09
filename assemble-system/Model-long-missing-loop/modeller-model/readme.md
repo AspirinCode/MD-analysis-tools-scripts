@@ -8,7 +8,7 @@ Because currently I am not able to figure out multimeric protein loop modeling i
 ## 1. Modeller  
 ### 1.1 Align sequence and PDB structure sequence  
 Use `/align/align.py` to generate the sequence alignment `two-component.ali`;  
-This is going to guide the `loopmodel` module what residues to add for missing loops. Also it would be good to name both the PDB and the sequence `ali` file to both four-letter name, eg., "m1v2", "t1v2". Not sure if otherwise Modeller still works.  
+This is going to guide the `loopmodel` module what residues to add for missing loops. Also it would be good to name both the PDB and the sequence `ali` file to both four-letter name, eg., "m1v2", "t1v2". Not sure if otherwise Modeller still works. "~/bin/modeller9.21/bin/mod9.21 xxx.py" to execute a Python script. 
 
 Code snippet:  
 ```

@@ -154,4 +154,4 @@ Reference links:
 VMD command-line options: https://www.ks.uiuc.edu/Research/vmd/current/ug/node246.html  
 VMD list of commands: https://www.ks.uiuc.edu/Research/namd/2.10b1/ug/node19.html   
 VMD's mol function: https://www.ks.uiuc.edu/Research/vmd/current/ug/node140.html  
-
+VMD's animate function: https://www.ks.uiuc.edu/Research/vmd/current/ug/node121.html  

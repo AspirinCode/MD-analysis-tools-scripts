@@ -118,17 +118,6 @@ set frame 0
    (do your own thing here) 
 } 
 
-- Loop over the frames and use Tcl 
-```
-readpsf ../step5.1_assembly.psf
-animate read dcd rct-v2-cbd-500ns.dcd waitfor all
-set numframe [molinfo 0 get numframes]
-for { set i 0 } { $i < $numframe } { incr i } {
-    animate goto $i
-    set prot [atomselect 0 "protein"]
-    $prot writepdb pdb_dir/frame$i.pdb
-}
-```
 # write the complete trajectory to disk 
 animate write dcd $final_dcd beg 0 end $frame waitfor all 
 ```
@@ -142,4 +131,16 @@ for i in {1..250}
 do
   printf "archglip_snap_${i}.dcd "
 done
+```
+
+- Loop over the frames and use Tcl 
+```
+readpsf ../step5.1_assembly.psf
+animate read dcd rct-v2-cbd-500ns.dcd waitfor all
+set numframe [molinfo 0 get numframes]
+for { set i 0 } { $i < $numframe } { incr i } {
+    animate goto $i
+    set prot [atomselect 0 "protein"]
+    $prot writepdb pdb_dir/frame$i.pdb
+}
 ```

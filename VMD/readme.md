@@ -135,6 +135,11 @@ done
 
 - Loop over the frames and use Tcl 
 ```
+vmd -dispdev text -e titin-strand-contacts.tcl # interactive
+vmd -dispdev text -eofexit < titin-strand-contacts.tcl > tsc.log
+```
+
+```
 readpsf ../step5.1_assembly.psf
 animate read dcd rct-v2-cbd-500ns.dcd waitfor all
 set numframe [molinfo 0 get numframes]

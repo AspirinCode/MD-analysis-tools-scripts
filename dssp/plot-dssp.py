@@ -29,7 +29,7 @@ for i in range(numframe):
     if i == 0:
         dssp_all = dssp
     else:
-        print(np.shape(dssp_all), np.shape(dssp))
+        #print(np.shape(dssp_all), np.shape(dssp))
         dssp_all = np.vstack((dssp_all, dssp))
 
 cbar_kws = {

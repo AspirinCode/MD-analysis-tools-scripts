@@ -1,0 +1,109 @@
+* INPUT FILES FOR hydrophobic thickness ANALYSIS, FROM Hongjing, Date 7/17/2017
+*
+
+DIMENS CHSIZE 3000000
+
+bomlev -1 !set as -1 to avoid breaddown due to 0 atom selection
+
+!debug
+!set outdir = /home/shf317/workdir/analysis/arch_mem/men8-conf
+set resname = men8
+set outdir = /home/shf317/workdir2/old_dir/shf317/analysis/men8_coordir/@fname
+set posid = POT
+set negid = CLA
+
+! Read topology and parameter files
+stream ./toppar.str
+
+!Read the system information
+stream ./step5_assembly.str
+
+! Read PSF and Coordinates
+open read unit 10 card name ./step5_assembly.psf
+read psf  unit 10 card
+
+!read NAMD file "namd/step7.95_production.coor"
+open read unit 10 card name ./step5_assembly.crd
+read coor unit 10 card
+
+!
+! Image Setup
+!
+
+open read unit 10 card name ./crystal_image.str
+CRYSTAL DEFINE @XTLtype @A @B @C @alpha @beta @gamma
+CRYSTAL READ UNIT 10 CARD
+
+!Image centering by residue
+IMAGE BYRESID XCEN 0.0 YCEN 0.0 ZCEN @zcen sele resname TIP3 .or. segid MEMB end
+IMAGE BYRESID XCEN 0.0 YCEN 0.0 ZCEN @zcen sele resname @posid .or. resname @negid end
+!IMAGE BYSEGID XCEN 0.0 YCEN 0.0 ZCEN @zcen sele segid PROA end
+
+!
+! Nonbonded Options [short distances and no pme just for image centering]
+!
+
+nbonds atom vatom vfswitch bycb -
+       ctonnb 4.0 ctofnb 5.0 cutnb 6.0 cutim 6.0 -
+       inbfrq -1 imgfrq -1 wmin 1.0 cdie eps 1.0 !-       ewald pmew fftx @fftx ffty @ffty fftz @fftz  kappa .34 spline order 6
+!energy
+
+!
+! Trajectory analysis (number of trajectory: @cntmax)
+!
+
+!calc cntmin = 901
+!calc cntmax = 1000 !@ns
+
+calc cnt     = @cntmin
+calc unit    = 11
+
+label opentrj
+
+    open read unit @unit file name ./namd/step7.@cnt.dcd
+    traj query unit @unit
+    
+    calc start = ?start
+    calc skip  = ?skip
+    calc nfile = ?NFILE / 2
+    
+    traj iread 11 nread 1 begin @start skip 10000
+    !open write unit 51 card name @outdir/men8-conf-@sysname-@cnt-ns.plo
+    
+    calc cmt = 1
+    set res1 = 1
+    
+    define lipoi sele resn @resname .and. type CR5 show end
+    coor stat lipoi
+    set nlipoi = ?nsel
+    
+    label readtrj
+    
+        traj read
+
+        open write unit 51 card name @outdir/@resname-@cnt-@cmt.coor   
+        write title unit 51
+        *?xtla ?xtlb ?xtlc 
+        *
+
+        set rescnt = 1
+        label eachLip
+            define xx sele lipoi .subset. @rescnt end
+            set resid = ?selresi
+            
+            coor stat sele resn @resname .and. resid @resid .and. type CR* show end
+            write title unit 51
+            *?xave ?yave ?zave
+            *
+            
+            increase rescnt by 1
+        if rescnt .le. @nlipoi  goto eachLip
+        
+        increase cmt  by 1
+    if cmt .le. @nfile goto readtrj
+    
+    increase cnt   by 1
+if cnt .le. @cntmax goto opentrj
+
+stop
+

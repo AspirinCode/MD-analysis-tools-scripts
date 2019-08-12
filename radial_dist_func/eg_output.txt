@@ -1,0 +1,10 @@
+	==================
+	Directory name is  10-men8
+	Calculation details: dr =  0.2 , bin number =  220
+	Coordination number is  1.4160408000388913
+	The first shell is located inside  5.300000000000001  Angstrom.
+	==================
+	Directory name is  20-men8
+	Calculation details: dr =  0.2 , bin number =  220
+	Coordination number is  5.156404355428432
+	The first shell is located inside  5.1000000000000005  Angstrom.

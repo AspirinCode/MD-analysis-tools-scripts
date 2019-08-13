@@ -21,7 +21,7 @@ foreach i ($chainid)
     sed -e '1,4d' < junk.pdb >> $outname
 
     #delete the END of first 3 chains but keep last one
-    if ( $cnt < 3 ) then
+    if ( $cnt <= 3 ) then
         sed -i -e '$d' $outname
     endif
     @ cnt += 1

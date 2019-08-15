@@ -35,3 +35,4 @@ ATOM  42656  C18 CBD H1001     107.955  96.180  86.165  1.00  0.00      HETD
 ATOM  42657  H16 CBD H1001     107.154  94.614  87.474  1.00  0.00      HETD
 ATOM  42658  H17 CBD H1001     107.888  96.011  88.339  1.00  0.00      HETD
 ```
+Another problem accosiated with PDBs from CHARMM-format DCD files is the 'HSD' residue name. Use `sed -e 's/HSD/HIS/g' output.pdb` to change the residue names to 'HIS'. 

@@ -28,7 +28,7 @@ endrad 5.           ! This is the pore radius that is taken
 
 2. Plot the 2D graph of pore radius vs channel coordinate:
 ```
-egrep "mid-|sampled" hole_out.txt > hole_out.tsv
+egrep "mid-|sampled" hole.out > hole_out.tsv
 # plot tsv
 ```
 3. A colored dot surface and visualize in VMD:  

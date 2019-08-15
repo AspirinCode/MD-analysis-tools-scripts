@@ -16,6 +16,16 @@ read coor unit 10 card
 
 delete atom sele segid POT .and. ( resid 472 : 475 ) end
 
+rename resname CAL sele segid POT .and. ( resid 436 : 439 ) end
+rename atom CAL sele resname CAL end
+
+scalar mass set 40.0800 sele resname CAL end
+scalar charge set 2.000 sele resname CAL end
+
+# c42b1 and above CHARMM version required for AIDX command;
+aidx CAL
+scalar type set ?AIDX sele resname CAL end
+
 open write card name step5.1_assembly.psf unit 14
 write psf  card unit 14
 

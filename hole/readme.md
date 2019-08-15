@@ -53,7 +53,7 @@ The output is "dotsurface.vmd_plot", which can be used in VMD by `source dotsurf
 sph_process -sos -dotden 15 -color hole_out.sph solid_surface.sos
 sos_triangle -s < solid_surface.sos > solid_surface.vmd_plot 
 ```
-
+Then in terminal type `vmd hetatm-w.pdb` to open PDB file of protein and open Tk Console to type `source solid_surface.vmd_plot` or `source dotsurface.vmd_plot`. 
 
 
 ### Reference links  

@@ -35,15 +35,11 @@ egrep "mid-|sampled" hole_out.txt > hole_out.tsv
 3.1 Use sph_process
 ```
 sph_process -dotden 15 -color hole_out.sph dotsurface.qpt
-
-# -dotden: dot density on the surface;
-# -color: colored surface;
-#       Red: pore radius is too tight for a water molecule;
-#       Green: room for a single water;
-#       Blue: radius is double the minimum for a single water.
-# dotsurface.qpt can be displayed in Quanta, to use in VMD,
-# need to use qpt_conv to convert.
 ```
+ `-dotden`: dot density on the surface;  
+ `-color`: colored surface;  red: pore radius is too tight for a water molecule; green: room for a single water; blue: radius is double the minimum for a single water.  
+ dotsurface.qpt can be displayed in Quanta.
+
 3.2 Convert to VMD format  
 `qpt_conv`: interactive job, take '.qpt' extension file e.g. dotsurface.qpt as input, choose VMD and others can be default;
 The output is "dotsurface.vmd_plot", which can be used in VMD by `source dotsurface.vmd_plot`. This is a VMD configuration file. 

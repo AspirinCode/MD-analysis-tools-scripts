@@ -3,6 +3,9 @@
 
 DIMENS CHSIZE 3000000 MAXRES 3000000
 
+! Run this script by charmm43 < step5.1_rename.inp 
+! alias charmm43='/share/ceph/woi216group-c2/shared/apps/charmm/c43b1_ifort'
+
 bomblev -1
 
 stream toppar.str

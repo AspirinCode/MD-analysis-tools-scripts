@@ -5,6 +5,8 @@ from contact_map import ContactMap
 pdb_list = [ "../pdb_dir_1_500ns/frame0.pdb",
             "../pdb_dir_5001_6000ns/frame4164.pdb"]
 
+# Program takes about several minutes to finish
+# It is a bit slow;
 for i in range(len(pdb_list)):
     pdb = md.load_pdb(pdb_list[i])
     frame_contacts = ContactMap(pdb[0], cutoff=1.5)

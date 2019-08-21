@@ -1,0 +1,38 @@
+* For mutating residues
+*
+
+DIMENS CHSIZE 3000000 MAXRES 3000000
+
+bomblev -1
+
+stream toppar.str
+stream step3_packing_pol.str
+
+system "cp {,old_}step3_packing_head.psf"
+system "cp {,old_}step3_packing_head.crd"
+
+open read unit 10 card name old_step3_packing_head.psf
+read psf  unit 10 card
+
+!read namd file "step7.1000_production.coor"
+open read unit 10 card name old_step3_packing_head.crd
+read coor unit 10 card
+
+rename resname SAPI14 sele segid HEAD .and. ( ( resid 668 .and. resn POPC ) .or. -
+                            ( resid 968 .and. resn POPE ) .or. -
+                            ( resid 831 .and. resn POPC ) .or. -
+                            ( resid 564 .and. resn CHL1 ) ) end
+scalar charge set -3.000 sele segid HEAD .and. ( resid 668 .or. resid 968 .or. -
+                            resid 831 .or. resid 564 ) .and. resname SAPI14 end
+
+rename resname POPC sele segid HEAD .and. ( resid 1046 .or. resid 1048 ) -
+                                .and. resn SAPI14 end
+rename resname POPE sele segid HEAD .and. resid 1047 .and. resn SAPI14 end
+rename resname CHL1 sele segid HEAD .and. resid 1049 .and. resn SAPI14 end
+scalar charge set 0.000 sele segid HEAD .and. ( resid 1046:1049 ) end
+
+open write card name step3_packing_head.psf unit 14
+write psf  card unit 14
+
+open write card name step3_packing_head.crd unit 14
+write coor card unit 14

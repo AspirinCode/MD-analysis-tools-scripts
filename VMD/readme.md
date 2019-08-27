@@ -140,7 +140,8 @@ vmd -dispdev text -eofexit < titin-strand-contacts.tcl > tsc.log
 ```
 
 ```
-readpsf ../step5.1_assembly.psf
+#readpsf ../step5.1_assembly.psf
+mol new ../step5.1_assembly.psf
 animate read dcd rct-v2-cbd-500ns.dcd waitfor all
 set numframe [molinfo 0 get numframes]
 for { set i 0 } { $i < $numframe } { incr i } {

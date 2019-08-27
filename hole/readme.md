@@ -53,6 +53,27 @@ Then in terminal type `vmd hetatm-w.pdb` to open PDB file of protein and open Tk
 
 ## Trajectory processing pipeline  
 1. Write protein-only pdb from the DCD trajectory;  
+Using `vmd -dispdev text -eofexit < make_traj_pdb.tcl`:
+```
+mol new ../step5.2_pene_resolved.psf
+animate read dcd rct-100frm-v2-apo-vanilla-300k-1001-1500ns.dcd beg 95
+set a1 [atomselect top "protein"]
+
+# Set up a procedure
+proc make_traj_pdb {} {
+    set num [molinfo top get numframes]
+    for {set i 0} {$i < $num} {incr i} {
+        set a1 [atomselect top "protein"]
+        animate goto $i
+        #set filename snap.[format "%04d" $i].ppm
+        set filename pdb_snap/apo-state1-[format "%d" $i].pdb
+        #render snapshot $filename
+        $a1 writepdb $filename
+    }
+}
+
+make_traj_pdb
+```
 2. RMS align the structures with a reference: using `vmd -e align-pdb.tcl`. The tcl script is shown here: 
 ```
 set prefix apo-state1

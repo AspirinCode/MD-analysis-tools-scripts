@@ -51,6 +51,84 @@ sos_triangle -s < solid_surface.sos > solid_surface.vmd_plot
 ```
 Then in terminal type `vmd hetatm-w.pdb` to open PDB file of protein and open Tk Console to type `source solid_surface.vmd_plot` or `source dotsurface.vmd_plot`. 
 
+## Trajectory processing pipeline  
+1. Write protein-only pdb from the DCD trajectory;  
+2. RMS align the structures with a reference: using `vmd -e align-pdb.tcl`. The tcl script is shown here: 
+```
+set prefix apo-state1
+
+for { set i 0 } { $i <= 9 } {incr i 1} {
+    mol new $prefix-$i.pdb
+    if {$i == 0 } {
+        set sel1 [atomselect $i "backbone"]
+    } else {
+        set sel2 [atomselect $i "backbone"]
+        set transformation_matrix [measure fit $sel2 $sel1]
+        set move_sel [atomselect $i "all"]
+        $move_sel move $transformation_matrix
+        $move_sel writepdb tf-$prefix-$i.pdb
+    }
+}
+```  
+3. Use an template HOLE2 input: hole-batch.inp. 
+```
+coord pdbname
+radius ~/bin/hole2/rad/simple.rad   ! Use simple AMBER vdw radii
+                ! n.b. can use ~ in hole
+!
+! now optional cards
+cvect  0 0 1
+cpoint 0 0 -24
+sphpdb output.sph             ! pdb format output of hole sphere centre info
+                ! (for use in sph_process program)
+endrad 5.           ! This is the pore radius that is taken
+                                ! as where channel ends. 5.0 Angstroms is good
+                                ! for a narrow channel
+```
+Use `csh run_hole.csh` to run the batch job:
+```
+#!/usr/bin/csh
+
+set i = 0
+while ( $i <= 9 )
+    sed -e "s/pdbname/tf-apo-state1-${i}\.pdb/g" -e "s/output/hole_${i}/g" hole-batch.inp > hole-temp.inp
+    hole < hole-temp.inp > hole_${i}.out
+    egrep "mid-|sampled" hole_${i}.out > hole_${i}.csv
+    sph_process -dotden 15 -color hole_${i}.sph dotsurface_${i}.qpt
+    sph_process -sos -dotden 15 -color hole_${i}.sph solid_surface_temp.sos
+    sos_triangle -s < solid_surface_temp.sos > solid_surface_${i}.vmd_plot
+    @ i += 1
+end
+```
+4. Download the results for plotting and visualization. 
+Use `csh run_achieve.csh`
+```
+#!/usr/bin/csh
+
+set folder = hole-result
+mkdir -p $folder
+
+set i = 0
+while ( $i <= 9 )
+    mv hole_$i.csv $folder
+    mv solid_surface_$i.vmd_plot $folder
+    @ i += 1
+end
+
+tar -czf $folder.tar.gz $folder
+```
+5. Plot the csv using `python plot.py`. 
+```
+import numpy as np
+import matplotlib.pyplot as plt
+
+for i in range(1, 10):
+    z, radius = np.loadtxt(f"hole-result/hole_{i}.csv", unpack=True, usecols=(0,1))
+    plt.plot(z, radius, label=f"pdb_{i}")
+
+plt.legend()
+plt.show()
+```
 
 ### Reference links  
 - Optional cards for HOLE: http://www.holeprogram.org/doc/old/hole_d03.html#card_may 

@@ -151,6 +151,19 @@ for { set i 0 } { $i < $numframe } { incr i } {
 }
 ``` 
 
+Change Cartoon style:
+```
+for { set i 0 } { $i < 20 } {incr i } {
+mol modstyle 0 $i NewCartoon
+}
+```
+
+Load psf and crd to VMD:
+```
+mol new step5_assembly.psf
+mol addfile {step5_assebmly.crd} type {cor} 0
+```
+
 Reference links:  
 VMD command-line options: https://www.ks.uiuc.edu/Research/vmd/current/ug/node246.html  
 VMD list of commands: https://www.ks.uiuc.edu/Research/namd/2.10b1/ug/node19.html   

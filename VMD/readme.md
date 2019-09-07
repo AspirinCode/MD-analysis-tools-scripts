@@ -16,7 +16,7 @@ render snapshot $filename
 proc make_rotation_movie_files {} {
 set frame 0
 for {set i 0} {$i < 360} {incr i 2} {
-set filename v2-340-1us-rtx.[format "%05d" $frame].ppm
+set filename snap.[format "%05d" $frame].ppm
 render snapshot $filename
 incr frame
 rotate y by 2
@@ -26,7 +26,7 @@ rotate y by 2
 
 - ffmpeg commands: 
 ```
-ffmpeg -r 24 -i untitled.%05d.ppm -vcodec mpeg4 -b 2G test_junk.mp4
+ffmpeg -r 24 -i snap.%05d.ppm -vcodec mpeg4 -b 2G test_junk.mp4
 ```
 
 - script for RMS alignment:  

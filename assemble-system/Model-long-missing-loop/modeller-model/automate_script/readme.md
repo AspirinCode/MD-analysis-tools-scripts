@@ -21,5 +21,10 @@ Use Modeller to model the missing loops within specified region, which includes 
 3. Step 3   
 Download the file to local laptop folder and visualize the result. Pick up the best one for each subnit and assemble it into the tetramer format, adding the ligands and other peptides. 
 
-4. Step 4 
-If all the produced models have unsatisfactory loops, we can feed the model to implicit model in CHARMM-GUI module and manipulate it then follow it with some dynamics. As a case study, I had a model where the modelled loops were all located in the transmembrane region instead of extracellular region, which would later impact lipid packing during assembly building. Thus I flipped the peptide upward and ran minimization as well as dynamics to relax it. An alternative is to use MMFP force to pull the peptide upward. I did not successfully make that because in this case, part of the missing loop region was stuck in a-helices bundle which stopped it from freely moving to extracelullar region. 
+4. Step 4   
+If all the produced models have unsatisfactory loops, we can feed the model to implicit model in CHARMM-GUI module and manipulate it then follow it with some dynamics.   
+As a case study, I had a model where the modelled loops were all located in the transmembrane region instead of extracellular region, which would later impact lipid packing during assembly building. Thus I flipped the peptide upward and ran minimization as well as dynamics to relax it. An alternative is to use MMFP force to pull the peptide upward. I did not successfully make that because in this case, part of the missing loop region was stuck in a-helices bundle which stopped it from freely moving to extracelullar region.  
+`step4_implicit.inp`: run implicit solvent simulations;  
+`step4_addNterm.csh`: add N-terminal back;
+`step3.1_addCBD.csh`: add ligands back;
+

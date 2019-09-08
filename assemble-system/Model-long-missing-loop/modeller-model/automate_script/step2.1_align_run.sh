@@ -1,6 +1,18 @@
 #!/bin/csh
-#set arr=('a' 'b' 'c' 'd')
-set arr=('b' 'c' 'd')
+#SBATCH --job-name=charmm
+#SBATCH --partition=eng
+#SBATCH --qos=nogpu
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --export=ALL
+##SBATCH --mail-user=shf317@lehigh.edu
+#SBATCH --mail-type=ALL
+#SBATCH --time=36:00:00
+#SBATCH --oversubscribe
+# echo commands to stdout
+
+set arr=('a' 'b' 'c' 'd')
+#set arr=('b' 'c' 'd')
 
 foreach i ($arr)
     echo "========================"

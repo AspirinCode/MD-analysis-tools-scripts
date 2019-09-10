@@ -1,0 +1,130 @@
+!bomlev -3
+
+DIMENS CHSIZE 1000000
+
+! set cutoff = 7
+set trjdir      = ..
+set timeseries  = 500ns
+
+! Read topology and parameter files
+stream toppar.str
+
+!Read the system information
+stream ../../step5.1_assembly.str
+
+! Read PSF and Coordinates
+open read unit 10 card name ../../step5.1_assembly.psf
+read psf  unit 10 card
+
+!read NAMD file "namd/step7.95_production.coor"
+open read unit 10 card name ../../step5.1_assembly.crd
+read coor unit 10 card
+
+!
+! Image Setup
+!
+
+open read unit 10 card name ../../crystal_image.str
+CRYSTAL DEFINE @XTLtype @A @B @C @alpha @beta @gamma
+CRYSTAL READ UNIT 10 CARD
+
+!Image centering by residue
+IMAGE BYRESID XCEN 0.0 YCEN 0.0 ZCEN @zcen sele resname TIP3 .or. segid MEMB end
+IMAGE BYRESID XCEN 0.0 YCEN 0.0 ZCEN @zcen sele segid POT .or. segid CLA .or. resname CAL end
+IMAGE BYSEGID XCEN 0.0 YCEN 0.0 ZCEN @zcen sele segid PRO* .or. segid HET* end
+
+
+!
+! Nonbonded Options[short distances and no pme just for image centering]
+!
+
+nbonds atom vatom vfswitch bycb -
+       ctonnb 4.0 ctofnb 5.0 cutnb 6.0 cutim 6.0 -
+       inbfrq -1 imgfrq -1 wmin 1.0 cdie eps 1.0 -
+!       ewald pmew fftx @fftx ffty @ffty fftz @fftz  kappa .34 spline order 6
+energy
+
+
+!
+! Trajectory analysis (number of trajectory: @maxcnt)
+!
+
+define proa sele segid proa .and. type C end
+calc nresproa   = ?nsel
+calc begres     = ?selresi
+calc endres     = @nresproa + @begres - 1  
+calc totres     = 4 * @nresproa
+
+calc cntmin     = 2501
+calc cntmax     = 3000
+
+calc cnt        = @cntmin
+calc unit       = 11
+calc cutoff     = 7
+
+label opentrj
+
+   open read unit @unit file name @trjdir/rct-v2-lig-300k-@timeseries.dcd
+
+   traj query unit 11
+
+    calc nfile = ?NFILE
+    calc start = ?start
+    calc skip  = ?skip
+
+   calc nfile = 10
+   traj firstu 11 nunit 1 skip @skip begin 0 stop @nfile
+   !traj iread 11 nread 1 begin @start
+
+   calc cmt = 1
+   label readtrj
+
+      traj read
+
+      open write unit 8 card name @{local}/network-batch@{batchid}-frame@cmt.dat
+      calc resi = @batchbeg 
+      label doresi
+
+        calc segidi = int(@resi / (@nresproa+1))
+        if segidi .eq. 0 set segni proa
+        if segidi .eq. 1 set segni prob
+        if segidi .eq. 2 set segni proc
+        if segidi .eq. 3 set segni prod
+        calc residi = @resi - @segidi * @nresproa + @begres - 1
+ 
+        calc resj = @resi + 1
+        label doresj
+
+            calc segidj = int(@resj / (@nresproa+1))
+            if segidj .eq. 0 set segnj proa
+            if segidj .eq. 1 set segnj prob
+            if segidj .eq. 2 set segnj proc
+            if segidj .eq. 3 set segnj prod    
+
+            calc residj = @resj - @segidj * @nresproa + @begres - 1 
+            coor dist cut @cutoff sele segid @segni .and. .not. hydrogen -
+                                                    .and. resid @residi end -
+                                  sele segid @segnj .and. .not. hydrogen -
+                                                    .and. resid @residj end
+            if ?npair .gt. 0 then 
+                write title unit 8
+                * @segni @residi @segnj @residj @resi @resj 1
+                *
+            endif
+    
+        incr resj by 1
+        if resj .le. @totres goto doresj
+    
+      incr resi by 1
+      if resi .le. @batchend then
+            if resi .ne. @totres goto doresi
+      endif 
+
+  incr cmt by 1
+  if cmt .le. @nfile goto readtrj
+
+incr cnt by 1
+!if cnt .le. @cntmax goto opentrj
+
+stop
+

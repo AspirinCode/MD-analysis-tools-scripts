@@ -7,6 +7,6 @@ calc c @a - @b * INT( @a / @b )
 ```
 
 - Traj-specific
-`
+```
 traj-spec::= [FIRSt int] [NUNIts int] [NSKIp int] [BEGIn int] [STOP int]
-`
+````

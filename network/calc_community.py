@@ -9,13 +9,20 @@ node1, node2 = np.loadtxt("../parallel/total-1.dat", usecols=(4,5), unpack=True,
 for i in range(len(node1)):
     G.add_edge(node1[i], node2[i])
 
-#part = best_partition(G)
+# Python-Louvain: https://github.com/taynaud/python-louvain
+# A python lib in accordance with networkx;
+# Code details can be found here: 
+# https://github.com/taynaud/python-louvain/blob/master/community/community_louvain.py
 part = community.best_partition(G,resolution=0.2)
+
+# Methods in Networkx.algorithms
+# https://networkx.github.io/documentation/stable/reference/algorithms/community.html
+from networkx.algorithms import community
 
 # greeday modularity communities
 part = community.greedy_modularity_communities(G)
 
-# girvan_newman model
+# girvan_newman model: slow
 import itertools
 comp = community.girvan_newman(G)
 limited = itertools.takewhile(lambda c: len(c) <= k, comp)

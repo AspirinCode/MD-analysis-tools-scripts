@@ -14,6 +14,8 @@ for i in range(len(node1)):
 # Installed by "conda install -c conda-forge python-louvain"
 # Code details can be found here: 
 # https://github.com/taynaud/python-louvain/blob/master/community/community_louvain.py
+# Documentation found here:
+# https://python-louvain.readthedocs.io/en/latest/api.html#
 part = community.best_partition(G,resolution=0.2)
 
 # Methods in Networkx.algorithms

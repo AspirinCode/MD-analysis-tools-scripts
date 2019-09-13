@@ -11,6 +11,7 @@ for i in range(len(node1)):
 
 # Python-Louvain: https://github.com/taynaud/python-louvain
 # A python lib in accordance with networkx;
+# Installed by "conda install -c conda-forge python-louvain"
 # Code details can be found here: 
 # https://github.com/taynaud/python-louvain/blob/master/community/community_louvain.py
 part = community.best_partition(G,resolution=0.2)

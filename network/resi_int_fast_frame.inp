@@ -1,0 +1,177 @@
+!bomlev -3
+
+DIMENS CHSIZE 1000000
+
+! REquired input variable values:
+!   iframe : starting frame given nfile/freq frames in total;
+!   eframe : ending frame;
+!   local  : scratch folder;
+!   timeseries : 5001-6000ns for dcd names;
+
+! set cutoff = 7
+set trjdir      = ..
+!set timeseries  = 500ns
+
+! Read topology and parameter files
+stream toppar.str
+
+!Read the system information
+stream ../../step5.1_assembly.str
+
+! Read PSF and Coordinates
+open read unit 10 card name ../../step5.1_assembly.psf
+read psf  unit 10 card
+
+! For NAMD file: "namd/step7.95_production.coor"
+open read unit 10 card name ../../step5.1_assembly.crd
+read coor unit 10 card
+
+!
+! Image Setup
+!
+
+open read unit 10 card name ../../crystal_image.str
+CRYSTAL DEFINE @XTLtype @A @B @C @alpha @beta @gamma
+CRYSTAL READ UNIT 10 CARD
+
+!Image centering by residue
+IMAGE BYRESID XCEN 0.0 YCEN 0.0 ZCEN @zcen sele resname TIP3 .or. segid MEMB end
+IMAGE BYRESID XCEN 0.0 YCEN 0.0 ZCEN @zcen sele segid POT .or. segid CLA .or. resname CAL end
+IMAGE BYSEGID XCEN 0.0 YCEN 0.0 ZCEN @zcen sele segid PRO* .or. segid HET* end
+
+
+!
+! Nonbonded Options[short distances and no pme just for image centering]
+!
+
+nbonds atom vatom vfswitch bycb -
+       ctonnb 4.0 ctofnb 5.0 cutnb 6.0 cutim 6.0 -
+       inbfrq -1 imgfrq -1 wmin 1.0 cdie eps 1.0 -
+!       ewald pmew fftx @fftx ffty @ffty fftz @fftz  kappa .34 spline order 6
+energy
+
+!
+! Trajectory analysis 
+!
+
+define proa sele segid proa .and. type C end
+calc nresproa   = ?nsel
+calc begres     = ?selresi
+calc endres     = @nresproa + @begres - 1  
+calc totres     = 4 * @nresproa
+
+calc unit       = 11
+calc cutoff     = 7
+
+define prot sele segid pro* .and. .not. hydrogen end
+
+label opentrj
+
+   open read unit @unit file name @trjdir/rct-v2-lig-300k-@timeseries.dcd
+
+   traj query unit 11
+
+   calc freq  = 4
+   calc nfile = int( ?NFILE / @freq)
+   calc nfile = @nfile - @iframe
+   calc start = ?start
+   calc skip  = ?skip * @freq
+   calc start = @skip * @iframe
+   calc end   = @skip * @eframe
+
+   traj firstu @unit nunit 1 skip @skip begin @start stop @end 
+   !traj iread 11 nread 1 begin @start
+
+   calc cmt = @iframe !1
+   label readtrj
+
+      traj read
+
+      open write unit 8 card name @{local}/frame-@cmt-resint-@timeseries.dat
+      calc resi = 1 !@batchbeg 
+      label doresi
+
+        ! Map @resi to segid and resid
+        calc segidi = int((@resi-1) / @nresproa))
+        if segidi .eq. 0 set segni proa
+        if segidi .eq. 1 set segni prob
+        if segidi .eq. 2 set segni proc
+        if segidi .eq. 3 set segni prod
+        calc residi = @resi - @segidi * @nresproa + @begres - 1
+
+        !! define central residue
+        define ref1 sele prot .and. segid @segni .and. resid @residi end
+
+        !! define envi sele atom @segni @residi * .around. 4.5 end 
+        !! Define environment cubic around central residue
+        coor stat sele ref1 end
+        calc xc1 = ?xmin - 4.5
+        calc xc2 = ?xmax + 4.5
+        calc yc1 = ?ymin - 4.5
+        calc yc2 = ?ymax + 4.5
+        calc zc1 = ?zmin - 4.5
+        calc zc2 = ?zmax + 4.5
+
+        !! Select environment atoms in the cubic, exclusing resi itself
+        define envi sele prot .and. ( prop x .gt. @xc1 ) .and. -
+         ( prop y .gt. @yc1 ) .and. ( prop z .gt. @zc1 ) .and. -
+         ( prop x .le. @xc2 ) .and. ( prop y .le. @yc2 ) .and. -
+         ( prop z .le. @zc2 ) end
+        define envi sele envi .and. .not. ref1 end
+
+        ! Put a loop searching over the envi
+        calc nenvi = ?nsel
+        set i = 1
+        ! Define sele XXX: residues have been calculated
+        define XXX sele none end
+
+        label search
+
+          ! Current envi atom under study
+          define XX sele envi .subset. @i end
+          set segid = ?selsegi
+          set resid = ?selresi
+
+          if segid .eq. proa calc segidj = 0
+          if segid .eq. prob calc segidj = 1
+          if segid .eq. proc calc segidj = 2
+          if segid .eq. prod calc segidj = 3
+          calc resj = @resid + 1 - @begres + @segidj * @nresproa
+          
+          ! Check if current sele XX is already calculated
+          define WW sele XX .and. XXX end 
+          if ?nsel .eq. 0 then
+          if @resj .gt. @resi then
+
+            define ZZ sele segid @segid .and. resid @resid end
+            coor dist 4.5 sele ref1 end sele ZZ end
+
+            if  ?npair .gt. 0 then
+
+              write title unit 8
+              * @segni @residi @segid @resid @resi @resj 1
+              *
+
+              ! Update the calculated residue list 
+              define XXX sele XX .or. ZZ end
+            endif
+          endif
+          endif
+
+        incr i by 1
+        if i .le. @nenvi  goto search
+
+      incr resi by 1
+      if resi .le. @totres goto doresi
+      ! For testing
+      !if resi .le. 5 goto doresi
+
+  incr cmt by 1
+  !if cmt .le. @nfile goto readtrj
+  !if cmt .le. @eframe goto readtrj
+
+!incr cnt by 1
+!if cnt .le. @cntmax goto opentrj
+
+stop
+

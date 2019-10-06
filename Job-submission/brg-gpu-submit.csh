@@ -50,3 +50,38 @@ setenv LD_LIBRARY_PATH /home/shashaf/apps/namd/v2.12/:$LD_LIBRARY_PATH
 setenv LD_LIBRARY_PATH /home/shashaf/apps/namd/v2.12/lib:$LD_LIBRARY_PATH
 
 namd2 +p12 namd.inp | tee namd.out > /dev/null
+
+
+###================================
+#   NAMD setting 
+###================================
+
+module load namd/2.12
+
+setenv CONV_RSH ssh
+
+cd ${SLURM_SUBMIT_DIR}
+
+set SLURM_NODEFILE=`get_slurm_nodelist`
+
+set NODELIST = namd2.nodelist
+set NODES    = `cat $SLURM_NODEFILE | sort -u `
+
+echo group main > $NODELIST
+foreach node ( $NODES )
+  echo host $node >> $NODELIST
+end
+
+set charmrun = `which charmrun`
+set namd2 = `which namd2`
+
+set i = 1
+#  @ i = ${i} + 2
+while ( ${i} <= 6 )
+   @ pcnt = ${i} - 1
+   if ( ${pcnt} > 0 && (! -e step6.${pcnt}_equilibration.coor)) exit
+   $charmrun $namd2 +p ${SLURM_NTASKS} ++nodelist ${NODELIST} ++ppn ${SLURM_NNODES} step6.${i}_equilibration.inp > step6.${i}_equilibration.out
+   @ i = ${i} + 1
+end
+
+exit

@@ -25,3 +25,28 @@ set i = 1
   $BINDIR/namd2 +p $SLURM_NPROCS +pemap 0-13+14 step6.${i}_equilibration.inp | tee step6.${i}_equilibration.out > /dev/null
   @ i = ${i} + 1
 end
+
+
+
+###================================
+#   Another example 
+###================================
+
+#!/bin/csh
+#SBATCH --partition=gpu-shared
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=12
+##SBATCH --gres=gpu:k80:2
+#SBATCH -t 00:10:00
+#SBATCH --export=ALL
+#SBATCH --no-requeue
+
+#K80 -- 4GPUs & 24 cores; P100 -- 2 GPUs & 14 cores;
+
+#Path to GPU enabled NAMD
+module load cuda
+setenv PATH /home/shashaf/apps/namd/v2.12/:$PATH
+setenv LD_LIBRARY_PATH /home/shashaf/apps/namd/v2.12/:$LD_LIBRARY_PATH
+setenv LD_LIBRARY_PATH /home/shashaf/apps/namd/v2.12/lib:$LD_LIBRARY_PATH
+
+namd2 +p12 namd.inp | tee namd.out > /dev/null

@@ -70,6 +70,17 @@ Draw color blue
 draw point {   -4.469   -5.828  -31.898}
 ```
 
+- Draw arrow   
+By defining such 'vmd_draw_$command', one can type 'draw $command xxxx xxxx' to draw stuffs. Here we define a function for drawing arrows. The default mol is 'top' I guess. We can call the following procedure by 'draw arrow {0 0 0} {1 1 1}'.
+```
+proc vmd_draw_arrow {mol start end} {
+    # an arrow is made of a cylinder and a cone
+    set middle [vecadd $start [vecscale 0.9 [vecsub $end $start]]]
+    graphics $mol cylinder $start $middle radius 0.15
+    graphics $mol cone $middle $end radius 0.25
+}
+```
+
 - Get the total charge:  
 ```
 proc get_total_charge {{molid top}} {
@@ -162,6 +173,14 @@ Load psf and crd to VMD:
 ```
 mol new step5_assembly.psf
 mol addfile {step5_assebmly.crd} type {cor} 0
+```
+
+Common-use Tcl commands:  
+```
+axes location off
+display projection orthographic
+color Display Background white
+draw color red
 ```
 
 Reference links:  

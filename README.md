@@ -22,3 +22,5 @@ This repository contains tools and scripts for analyses of molecular dynamics si
 - Enhanced sampling-related anlysis: MBAR, WHAM, EXP, TI etc; 
 
 
+## About author
+Shasha Feng is currently a PhD student at Dr. Wonpil Im's group at Lehigh University. She did her undergraduate study at Peking University with Dr. Chen Song (membrane protein biophysics) and Dr. Peng Zou (voltage sensor engineering). The research interests focus on understanding the molecular interactions in biological systems, employing tools like MD simulations, statistics, and machine learning. 

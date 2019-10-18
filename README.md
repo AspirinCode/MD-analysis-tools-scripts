@@ -1,6 +1,9 @@
 # MD simulations set-up and data analysis
 This repository contains tools and scripts for analyses of molecular dynamics simulations. 
 
+<img src='./img/readme-img.png' width='500px'>
+(An example of allosteric network analysis. Left, protein network visualized in PyMOL; Right, entropy transfer between different residues and statistices on each residue.)
+
 ## Topics 
 
 ### System preparation: 
